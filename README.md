@@ -10,8 +10,8 @@
 |                    |                                             |
 | :----------------- | :------------------------------------------ |
 | `Tuesday 20 Oct`   | Released, in lab                            |
-| `Tuesday 27 Oct`   | Due at 2:30pm, the start of lab             |
-| `Tuesday 27 Oct`   | Verbal checks, during that same lab session |
+| `Thursday 5 Nov`   | Due at 11:00am, the start of class          |
+| `Tuesday 10 Nov`   | Verbal checks, in lab                       |
 | Points             | 3                                           |
 
 A coding agent has just written a change. It estimates how likely the
