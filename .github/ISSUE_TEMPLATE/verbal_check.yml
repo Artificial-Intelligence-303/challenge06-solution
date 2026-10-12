@@ -1,0 +1,41 @@
+name: Verbal Check
+description: The short spoken check on a challenge, done in lab with the instructor.
+title: "Challenge 6 Verbal Check"
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Filled in by the instructor or a technical leader during lab. The student
+        answers two or three questions about their own code in the context of the
+        assignment at hand. This is a check on understanding, not a presentation.
+
+        Challenge 6 asked for four functions in `src/decisions.py`:
+        `expected_utility`, `best_action`, `posterior` and `value_of_information`.
+        Every line below is about one of them, or about what the agent printed.
+  - type: input
+    attributes:
+      label: Student
+    validations:
+      required: true
+  - type: checkboxes
+    attributes:
+      label: Understanding
+      description: Tick each line the student explained correctly, in their own words. Two or three questions is enough; no line needs their code open or a remembered number.
+      options:
+        - label: "Expected utility they wrote. What each term of the sum is, and why the best action changes as P(buggy) moves."
+        - label: "The posterior they wrote. What it multiplies, what it divides by, and why it returns a new belief."
+        - label: "The value of information they wrote. What is weighted by what, what is subtracted, and why it can be 0."
+        - label: "Reading the agent. Why it tests a rename but not a small feature, or what a changed utility does to its choices."
+  - type: dropdown
+    attributes:
+      label: Outcome
+      options:
+        - "Passed: explained their own work clearly"
+        - "Passed with gaps: correct code, shaky explanation"
+        - "Not yet: could not provide clear answers, can redo with a token use"
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Notes
+      description: What to follow up on, and anything worth remembering for the next challenge.

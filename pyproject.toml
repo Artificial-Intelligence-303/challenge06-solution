@@ -1,0 +1,45 @@
+[project]
+name = "challenge-06-expected-utility"
+version = "1.0.0"
+description = "CMPSC 303 Challenge 6: an agent that decides by expected utility."
+requires-python = ">=3.11"
+dependencies = [
+    "gatorgrade",
+    "mypy>=1.11",
+    "pytest",
+    "pytest-timeout",
+    "ruff",
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+# Every test here finishes in well under a second. A stuck one fails here
+# instead of hanging.
+timeout = 10
+
+[tool.mypy]
+ignore_missing_imports = true
+mypy_path = "src"
+
+# Style is checked against the Google Python Style Guide:
+# https://google.github.io/styleguide/pyguide.html
+[tool.ruff]
+line-length = 80
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors, includes line length
+    "W",   # pycodestyle warnings, includes trailing whitespace
+    "F",   # pyflakes, unused imports and names
+    "I",   # import ordering
+    "D",   # docstring conventions
+    "N",   # naming conventions
+]
+ignore = [
+    "D203",  # conflicts with D211, which ruff prefers
+    "D213",  # conflicts with D212, which matches the Google convention
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
