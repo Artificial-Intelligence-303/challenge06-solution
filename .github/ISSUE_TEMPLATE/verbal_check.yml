@@ -9,9 +9,9 @@ body:
         answers two or three questions about their own code in the context of the
         assignment at hand. This is a check on understanding, not a presentation.
 
-        Challenge 6 asked for four functions in `src/decisions.py`:
-        `expected_utility`, `best_action`, `posterior` and `value_of_information`.
-        Every line below is about one of them, or about what the agent printed.
+        Challenge 6 asked for four functions in `src/naive_bayes.py`: `bayes_rule`,
+        `train`, `classify` and `accuracy`. Every line below is about one of them, or
+        about what the car's detector printed.
   - type: input
     attributes:
       label: Student
@@ -22,10 +22,10 @@ body:
       label: Understanding
       description: Tick each line the student explained correctly, in their own words. Two or three questions is enough; no line needs their code open or a remembered number.
       options:
-        - label: "Expected utility they wrote. What each term of the sum is, and why the best action changes as P(buggy) moves."
-        - label: "The posterior they wrote. What it multiplies, what it divides by, and why it returns a new belief."
-        - label: "The value of information they wrote. What is weighted by what, what is subtracted, and why it can be 0."
-        - label: "Reading the agent. Why it tests a rename but not a small feature, or what a changed utility does to its choices."
+        - label: "Bayes' rule they wrote. What it multiplies, what it divides by, and why that divisor is the probability of the evidence."
+        - label: "Training they wrote. How a prior and a likelihood come from counting, and what smoothing prevents."
+        - label: "Classify they wrote. Why naive Bayes multiplies one likelihood per sensor, and what assumption that needs."
+        - label: "Reading the car. Why camera2 makes the detector more confident than the data supports, or which kind of mistake it trades for which."
   - type: dropdown
     attributes:
       label: Outcome
