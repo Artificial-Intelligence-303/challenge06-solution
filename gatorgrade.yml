@@ -5,95 +5,105 @@
 # These are the same checks that run on GitHub when you push. Results are
 # preliminary: the final grade is determined by the instructor.
 
-- description: "[BAYES] Bayes' rule gives the detector answer from class, 0.67"
+- description: "[EU] Expected utility weights each state by its probability"
   check: ExecuteCommand
   options:
-    command: uv run pytest tests/test_naive_bayes.py::test_bayes_rule_gives_the_detector_answer_from_class
+    command: uv run pytest tests/test_decisions.py::test_expected_utility_weights_each_state_by_its_probability
 
-- description: "[BAYES] Bayes' rule works for three classes"
+- description: "[EU] Expected utility of merge, review and discard at 0.15"
   check: ExecuteCommand
   options:
-    command: uv run pytest tests/test_naive_bayes.py::test_bayes_rule_works_for_three_classes
+    command: uv run pytest tests/test_decisions.py::test_expected_utility_of_each_merge_action
 
-- description: "[BAYES] Bayes' rule leaves the prior unchanged"
+- description: "[EU] Expected utility when the state is certain"
   check: ExecuteCommand
   options:
-    command: uv run pytest tests/test_naive_bayes.py::test_bayes_rule_leaves_the_prior_unchanged
+    command: uv run pytest tests/test_decisions.py::test_expected_utility_when_the_state_is_certain
 
-- description: "[TRAIN] Training counts the prior"
+- description: "[BEST] The best action comes back with its expected utility"
   check: ExecuteCommand
   options:
-    command: uv run pytest tests/test_naive_bayes.py::test_train_counts_the_prior
+    command: uv run pytest tests/test_decisions.py::test_best_action_returns_the_action_and_its_value
 
-- description: "[TRAIN] Without smoothing, likelihoods are plain shares"
+- description: "[BEST] The best action changes with the belief"
   check: ExecuteCommand
   options:
-    command: uv run pytest tests/test_naive_bayes.py::test_train_without_smoothing_gives_plain_shares
+    command: uv run pytest tests/test_decisions.py::test_best_action_changes_with_the_belief
 
-- description: "[TRAIN] Smoothing adds one to every count"
+- description: "[BEST] The best action works for three states"
   check: ExecuteCommand
   options:
-    command: uv run pytest tests/test_naive_bayes.py::test_train_smoothing_adds_one_to_every_count
+    command: uv run pytest tests/test_decisions.py::test_best_action_works_for_three_states
 
-- description: "[TRAIN] An unseen value never gets probability 0"
+- description: "[BEST] A tie goes to the action listed first"
   check: ExecuteCommand
   options:
-    command: uv run pytest tests/test_naive_bayes.py::test_train_never_gives_an_unseen_value_probability_zero
+    command: uv run pytest tests/test_decisions.py::test_best_action_breaks_a_tie_by_order
 
-- description: "[TRAIN] Training on the car data"
+- description: "[BAYES] The posterior follows Bayes' rule"
   check: ExecuteCommand
   options:
-    command: uv run pytest tests/test_naive_bayes.py::test_train_on_the_car_data
+    command: uv run pytest tests/test_decisions.py::test_posterior_follows_bayes_rule
 
-- description: "[CLASSIFY] With one feature, naive Bayes is Bayes' rule"
+- description: "[BAYES] The posterior adds up to 1"
   check: ExecuteCommand
   options:
-    command: uv run pytest tests/test_naive_bayes.py::test_classify_with_one_feature_is_bayes_rule
+    command: uv run pytest tests/test_decisions.py::test_posterior_adds_up_to_one
 
-- description: "[CLASSIFY] Two detectors flag the essay: 0.97, as in class"
+- description: "[BAYES] Evidence every state shares leaves the belief alone"
   check: ExecuteCommand
   options:
-    command: uv run pytest tests/test_naive_bayes.py::test_classify_multiplies_the_evidence
+    command: uv run pytest tests/test_decisions.py::test_posterior_ignores_evidence_every_state_shares
 
-- description: "[CLASSIFY] Classify reads the value that was observed"
+- description: "[BAYES] The posterior leaves the belief it was given unchanged"
   check: ExecuteCommand
   options:
-    command: uv run pytest tests/test_naive_bayes.py::test_classify_reads_the_value_that_was_observed
+    command: uv run pytest tests/test_decisions.py::test_posterior_leaves_the_belief_it_was_given_unchanged
 
-- description: "[CLASSIFY] Classify works for three classes"
+- description: "[VOI] The forecast is worth 6.3 on a cloudy morning"
   check: ExecuteCommand
   options:
-    command: uv run pytest tests/test_naive_bayes.py::test_classify_works_for_three_classes
+    command: uv run pytest tests/test_decisions.py::test_value_of_information_for_the_forecast
 
-- description: "[CLASSIFY] Every posterior adds up to 1"
+- description: "[VOI] The tests are worth 1.608 on a rename and 1.62 on a refactor"
   check: ExecuteCommand
   options:
-    command: uv run pytest tests/test_naive_bayes.py::test_classify_adds_up_to_one
+    command: uv run pytest tests/test_decisions.py::test_value_of_information_of_the_tests
 
-- description: "[CLASSIFY] A sensor the model never saw is skipped"
+- description: "[VOI] Information that changes no action is worth 0"
   check: ExecuteCommand
   options:
-    command: uv run pytest tests/test_naive_bayes.py::test_classify_skips_a_feature_it_has_no_table_for
+    command: uv run pytest tests/test_decisions.py::test_value_of_information_is_zero_when_no_result_changes_the_action
 
-- description: "[CLASSIFY] Classify leaves the evidence unchanged"
+- description: "[VOI] A useless tool is worth 0"
   check: ExecuteCommand
   options:
-    command: uv run pytest tests/test_naive_bayes.py::test_classify_leaves_the_evidence_unchanged
+    command: uv run pytest tests/test_decisions.py::test_value_of_information_is_zero_for_a_useless_tool
 
-- description: "[CLASSIFY] Both cameras say yes on the car data: 0.977"
+- description: "[VOI] Information is never worth less than 0"
   check: ExecuteCommand
   options:
-    command: uv run pytest tests/test_naive_bayes.py::test_classify_on_the_car_data
+    command: uv run pytest tests/test_decisions.py::test_value_of_information_is_never_negative
 
-- description: "[ACCURACY] Accuracy on examples counted by hand"
+- description: "[VOI] A perfect tool is worth 21 on a cloudy morning"
   check: ExecuteCommand
   options:
-    command: uv run pytest tests/test_naive_bayes.py::test_accuracy_on_examples_counted_by_hand
+    command: uv run pytest tests/test_decisions.py::test_value_of_a_perfect_tool
 
-- description: "[ACCURACY] Accuracy on the test data: 0.900 and 0.935"
+- description: "[VOI] Looking ahead leaves the belief unchanged"
   check: ExecuteCommand
   options:
-    command: uv run pytest tests/test_naive_bayes.py::test_accuracy_on_the_test_data
+    command: uv run pytest tests/test_decisions.py::test_value_of_information_leaves_the_belief_unchanged
+
+- description: "[AGENT] The agent merges a typo fix without testing"
+  check: ExecuteCommand
+  options:
+    command: uv run pytest tests/test_decisions.py::test_the_agent_merges_a_typo_fix_without_testing
+
+- description: "[AGENT] The agent runs the tests on a refactor"
+  check: ExecuteCommand
+  options:
+    command: uv run pytest tests/test_decisions.py::test_the_agent_runs_the_tests_on_a_refactor
 
 - description: "[STYLE] Code follows the Google Python style guide"
   check: ExecuteCommand
@@ -105,8 +115,8 @@
   options:
     command: uv run mypy src tests
 
-- src/naive_bayes.py:
-  - description: "[STYLE] No unfinished TODO markers are left in naive_bayes.py"
+- src/decisions.py:
+  - description: "[STYLE] No unfinished TODO markers are left in decisions.py"
     check: MatchFileFragment
     options:
       fragment: "TODO"

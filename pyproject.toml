@@ -1,7 +1,7 @@
 [project]
-name = "challenge-06-naive-bayes"
+name = "challenge-06-expected-utility"
 version = "1.0.0"
-description = "CMPSC 303 Challenge 6: a code reviewer built with naive Bayes."
+description = "CMPSC 303 Challenge 6: an agent that decides by expected utility."
 requires-python = ">=3.11"
 dependencies = [
     "gatorgrade",
