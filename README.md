@@ -76,6 +76,31 @@ expected utility of the best action now.
 
 The docstring at the top of `decisions.py` shows the shape of every table.
 
+### From the formula to code
+
+Every formula here is a sum, and every sum becomes a loop: start a total at
+0, loop over the states (or the results), and add one term each time.
+
+| Formula | Python |
+| :------ | :----- |
+| P(s) | `belief[state]` |
+| U(a, s) | `utilities[action][state]` |
+| P(r \| s) | `tool[result][state]` |
+| sum over states of ... | `for state in belief:` with `total += ...` |
+
+Each function's docstring works one example by hand, with P(buggy) = 0.5.
+Check each function against it as you go, before moving to the next: the
+later functions call the earlier ones.
+
+```
+uv run python
+>>> import sys; sys.path.insert(0, "src")
+>>> from decisions import expected_utility
+>>> from agent import UTILITIES
+>>> expected_utility({"correct": 0.5, "buggy": 0.5}, UTILITIES, "merge")
+-35.0
+```
+
 ## Running it
 
 ```

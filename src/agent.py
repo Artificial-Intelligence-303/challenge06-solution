@@ -90,11 +90,16 @@ def next_step(
     Returns:
         ("call", tool name) or ("act", action name).
     """
-    gains = {
-        name: value_of_information(belief, utilities, tool) - costs[name]
-        for name, tool in tools.items()
-    }
-    best_tool = max(gains, key=lambda name: gains[name])
-    if gains[best_tool] > 0:
+    best_tool = ""
+    best_gain = 0.0
+    for name in tools:
+        gain = (
+            value_of_information(belief, utilities, tools[name]) - costs[name]
+        )
+        if gain > best_gain:
+            best_tool = name
+            best_gain = gain
+    if best_tool != "":
         return "call", best_tool
-    return "act", best_action(belief, utilities)[0]
+    action, value = best_action(belief, utilities)
+    return "act", action
