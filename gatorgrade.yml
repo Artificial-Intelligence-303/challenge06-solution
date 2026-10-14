@@ -40,26 +40,6 @@
   options:
     command: uv run pytest tests/test_decisions.py::test_best_action_breaks_a_tie_by_order
 
-- description: "[BAYES] The posterior follows Bayes' rule"
-  check: ExecuteCommand
-  options:
-    command: uv run pytest tests/test_decisions.py::test_posterior_follows_bayes_rule
-
-- description: "[BAYES] The posterior adds up to 1"
-  check: ExecuteCommand
-  options:
-    command: uv run pytest tests/test_decisions.py::test_posterior_adds_up_to_one
-
-- description: "[BAYES] Evidence every state shares leaves the belief alone"
-  check: ExecuteCommand
-  options:
-    command: uv run pytest tests/test_decisions.py::test_posterior_ignores_evidence_every_state_shares
-
-- description: "[BAYES] The posterior leaves the belief it was given unchanged"
-  check: ExecuteCommand
-  options:
-    command: uv run pytest tests/test_decisions.py::test_posterior_leaves_the_belief_it_was_given_unchanged
-
 - description: "[VOI] The forecast is worth 6.3 on a cloudy morning"
   check: ExecuteCommand
   options:

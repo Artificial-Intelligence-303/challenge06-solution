@@ -93,38 +93,6 @@ def test_best_action_breaks_a_tie_by_order() -> None:
     assert best_action({"s": 1.0}, tied)[0] == "first"
 
 
-def test_posterior_follows_bayes_rule() -> None:
-    """At 0.15, failing tests: 0.15 x 0.6 / (0.85 x 0.05 + 0.15 x 0.6)."""
-    after = posterior(belief_from_risk(0.15), TOOLS["tests"]["fail"])
-    assert close(after["buggy"], 0.09 / 0.1325)
-    assert close(after["correct"], 0.0425 / 0.1325)
-
-
-def test_posterior_adds_up_to_one() -> None:
-    """A lint warning at 0.4 gives 0.375 and 0.625, which add to 1."""
-    after = posterior(belief_from_risk(0.4), TOOLS["lint"]["warn"])
-    assert close(after["correct"], 0.375)
-    assert close(after["buggy"], 0.625)
-    assert close(sum(after.values()), 1.0)
-
-
-def test_posterior_ignores_evidence_every_state_shares() -> None:
-    """An observation equally likely in every state leaves the belief alone."""
-    after = posterior(
-        {"x": 0.2, "y": 0.5, "z": 0.3}, {"x": 0.4, "y": 0.4, "z": 0.4}
-    )
-    assert close(after["x"], 0.2) and close(after["y"], 0.5)
-    assert close(after["z"], 0.3)
-
-
-def test_posterior_leaves_the_belief_it_was_given_unchanged() -> None:
-    """Return a new belief; the caller's belief must not change."""
-    belief = belief_from_risk(0.4)
-    before = copy.deepcopy(belief)
-    posterior(belief, TOOLS["tests"]["fail"])
-    assert belief == before
-
-
 def test_value_of_information_for_the_forecast() -> None:
     """Rainy forecast: take it (53.33); sunny: leave it (86.86). VOI 6.3."""
     assert close(value_of_information(CLOUDY_MORNING, UMBRELLA, FORECAST), 6.3)

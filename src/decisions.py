@@ -1,8 +1,9 @@
 """Choosing an action under uncertainty, and deciding when to look first.
 
-**You implement four functions in this file**: `expected_utility`,
-`best_action`, `posterior` and `value_of_information`. Everything else is
-provided.
+**You implement three functions in this file**: `expected_utility`,
+`best_action` and `value_of_information`. Everything else is provided,
+including two helpers at the bottom, `result_probability` and `posterior`:
+the same Bayes' rule you wrote in Challenge 5, for one tool result.
 
 Three kinds of table, all plain dictionaries:
 
@@ -29,7 +30,7 @@ check each function as you write it, for example in `uv run python`:
     >>> expected_utility({"correct": 0.5, "buggy": 0.5}, UTILITIES, "merge")
     -35.0
 
-None of the four functions knows anything about code or merging. They work
+None of these functions knows anything about code or merging. They work
 for any states, any actions and any tool, which the tests check.
 """
 
@@ -98,46 +99,6 @@ def best_action(belief: Belief, utilities: Utilities) -> tuple[str, float]:
     return best, best_value
 
 
-def posterior(belief: Belief, likelihood: dict[str, float]) -> Belief:
-    """Return the belief after one observation, by Bayes' rule.
-
-    The formula, for every state s, where e is what was observed:
-
-        P(s | e) = P(e | s) * P(s) / P(e)
-        P(e)     = sum of P(e | s) * P(s), over every state s
-
-    In code, in two loops: first multiply each state's prior by its
-    likelihood and add the products up (that sum is P(e)); then divide
-    every product by the sum. Build a new dictionary and return it; do not
-    change `belief`.
-
-    Here `likelihood` is one row of a tool, such as `tool["fail"]`.
-
-    Worked example, P(buggy) = 0.5, and the tests fail:
-
-        products:  correct 0.5 * 0.05 = 0.025   buggy 0.5 * 0.6 = 0.3
-        P(fail) = 0.025 + 0.3 = 0.325
-        posterior: correct 0.025 / 0.325 = 0.077
-                   buggy   0.3   / 0.325 = 0.923
-
-    Args:
-        belief: The probability of each state before the observation.
-        likelihood: P(observation | state) for each state.
-
-    Returns:
-        A new belief, P(state | observation) for each state.
-    """
-    products = {}
-    total = 0.0
-    for state in belief:
-        products[state] = belief[state] * likelihood[state]
-        total += products[state]
-    after = {}
-    for state in products:
-        after[state] = products[state] / total
-    return after
-
-
 def value_of_information(
     belief: Belief, utilities: Utilities, tool: Tool
 ) -> float:
@@ -150,7 +111,7 @@ def value_of_information(
 
     In code, for each result in `tool`:
 
-        1. P(r) is the sum over states of P(r | s) * P(s). If it is 0,
+        1. P(r) is `result_probability(belief, tool[result])`. If it is 0,
            skip this result.
         2. Update the belief with `posterior(belief, tool[result])`.
         3. Find the best action under that new belief; keep its value.
@@ -180,9 +141,7 @@ def value_of_information(
     after_looking = 0.0
     for result in tool:
         likelihood = tool[result]
-        p_result = 0.0
-        for state in belief:
-            p_result += likelihood[state] * belief[state]
+        p_result = result_probability(belief, likelihood)
         if p_result == 0:
             continue
         new_belief = posterior(belief, likelihood)
@@ -190,3 +149,45 @@ def value_of_information(
         after_looking += p_result * value
     action, value_now = best_action(belief, utilities)
     return after_looking - value_now
+
+
+def result_probability(belief: Belief, likelihood: dict[str, float]) -> float:
+    """Return how likely a tool result is under the current belief.
+
+    Provided. The law of total probability: P(r) = sum of P(r | s) * P(s).
+    With P(buggy) = 0.5, P(fail) = 0.5 * 0.05 + 0.5 * 0.6 = 0.325.
+
+    Args:
+        belief: The probability of each state.
+        likelihood: P(result | state) for one result, such as
+            `tool["fail"]`.
+
+    Returns:
+        P(result).
+    """
+    total = 0.0
+    for state in belief:
+        total += likelihood[state] * belief[state]
+    return total
+
+
+def posterior(belief: Belief, likelihood: dict[str, float]) -> Belief:
+    """Return the belief after one tool result, by Bayes' rule.
+
+    Provided. P(s | r) = P(r | s) * P(s) / P(r), for every state s. With
+    P(buggy) = 0.5 and the tests failing: buggy 0.3 / 0.325 = 0.923,
+    correct 0.025 / 0.325 = 0.077. Returns a new dictionary; `belief` is
+    not changed.
+
+    Args:
+        belief: The probability of each state before the result.
+        likelihood: P(result | state) for each state.
+
+    Returns:
+        A new belief, P(state | result) for each state.
+    """
+    total = result_probability(belief, likelihood)
+    after = {}
+    for state in belief:
+        after[state] = likelihood[state] * belief[state] / total
+    return after

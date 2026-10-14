@@ -9,8 +9,8 @@ body:
         answers two or three questions about their own code in the context of the
         assignment at hand. This is a check on understanding, not a presentation.
 
-        Challenge 6 asked for four functions in `src/decisions.py`:
-        `expected_utility`, `best_action`, `posterior` and `value_of_information`.
+        Challenge 6 asked for three functions in `src/decisions.py`:
+        `expected_utility`, `best_action` and `value_of_information`; `posterior` was provided.
         Every line below is about one of them, or about what the agent printed.
   - type: input
     attributes:
@@ -23,7 +23,7 @@ body:
       description: Tick each line the student explained correctly, in their own words. Two or three questions is enough; no line needs their code open or a remembered number.
       options:
         - label: "Expected utility they wrote. What each term of the sum is, and why the best action changes as P(buggy) moves."
-        - label: "The posterior they wrote. What it multiplies, what it divides by, and why it returns a new belief."
+        - label: "The posterior they used. What a tool result does to the belief, and why the agent needs the new belief to value the tool."
         - label: "The value of information they wrote. What is weighted by what, what is subtracted, and why it can be 0."
         - label: "Reading the agent. Why it tests a rename but not a small feature, or what a changed utility does to its choices."
   - type: dropdown

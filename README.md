@@ -21,8 +21,11 @@ tests, which costs time, or a quick static checker. Whether running them
 is worth it depends on whether their answer could change what the agent
 does.
 
-You write the four functions that make those decisions. The agent, its
-utilities and its tools are provided.
+This is the choice every tool-using agent makes before it calls a tool,
+and Challenge 7 builds one: is the answer worth what the call costs?
+
+You write the three functions that make those decisions. The agent, its
+utilities, its tools and the Bayes' rule step are provided.
 
 ## Course learning outcomes
 
@@ -50,7 +53,7 @@ Every number in `agent.py` is invented for this challenge.
 
 ## What you implement
 
-Four functions in `src/decisions.py`. Everything else is provided. None of
+Three functions in `src/decisions.py`. Everything else is provided. None of
 them knows anything about code: each works for any states, any actions and
 any tool, and the tests check that on a second problem.
 
@@ -63,16 +66,18 @@ The sum over states of P(state) times U(action, state).
 The action with the highest expected utility, and that expected utility.
 A tie goes to the action listed first.
 
-### 3. `posterior(belief, likelihood)`
-
-The belief after one observation, by Bayes' rule: multiply each state's
-prior by the likelihood, then divide by the sum. Return a new dictionary.
-
-### 4. `value_of_information(belief, utilities, tool)`
+### 3. `value_of_information(belief, utilities, tool)`
 
 For each result the tool can give, its probability times the expected
 utility of the best action after seeing it. Add those, then subtract the
 expected utility of the best action now.
+
+### Provided: `result_probability` and `posterior`
+
+At the bottom of `decisions.py`. They are Challenge 5's law of total
+probability and Bayes' rule, for one tool result: `result_probability`
+gives P(result), and `posterior` gives the belief after seeing it. Call
+both from `value_of_information`.
 
 The docstring at the top of `decisions.py` shows the shape of every table.
 
@@ -136,8 +141,6 @@ pass. These are:
 
 - `expected_utility` and `best_action` give the right values and actions
   on the coding agent, on an umbrella problem, and with three states.
-- `posterior` follows Bayes' rule, adds up to 1, and leaves the belief it
-  was given unchanged.
 - `value_of_information` gives the right values, is 0 when no answer can
   change the action, and is never negative.
 - The agent merges a typo fix without testing and runs the tests on a
@@ -178,7 +181,7 @@ explain what you submit.
 
 Concretely, for this assignment:
 
-- **Write the four functions yourself.** They are this week's idea.
+- **Write the three functions yourself.** They are this week's idea.
 - **Check one value of information by hand.** For "rename a variable",
   work out P(buggy) after a failing test and after a passing one, pick the
   best action for each, and compare with what `main.py` prints.
@@ -197,7 +200,7 @@ utilities written where you can change them.
 I used Claude to draft `agent.py`, the tests and `main.py`, and to compute
 every number the tests expect. I ran the reference solution and the
 unfinished starter against every check, and checked the checks against
-wrong versions of all four functions, not only against empty ones.
+wrong versions of all three functions, not only against empty ones.
 
 ## Disclosing your AI use
 
@@ -223,7 +226,7 @@ tool loses you points.
 
 | File                 | Here                         | Student copy                    |
 | :------------------- | :--------------------------- | :------------------------------ |
-| `src/decisions.py`   | four functions implemented   | four `TODO` stubs               |
+| `src/decisions.py`   | three functions implemented  | three `TODO` stubs              |
 | `docs/summary.md`    | reference reflection         | questions with `TODO`           |
 | `README.md`          | this banner and these notes  | no banner, no notes             |
 
@@ -247,22 +250,22 @@ above. The small feature's tests are worth 0 because a failure (P(buggy)
 
 ### Verification
 
-- Solution: 25 of 25 `gatorgrade` checks.
-- Starter: 20 of 20 tests fail; 2 of 25 checks pass (ruff and mypy, on
+- Solution: 21 of 21 `gatorgrade` checks.
+- Starter: 16 of 16 tests fail; 2 of 21 checks pass (ruff and mypy, on
   purpose, so students start type-clean).
-- Eight wrong versions, each caught by a check that names the mistake, none
+- `posterior` and `result_probability` are provided (2026-10-14, her call:
+  Bayes' rule is Challenge 5's), so their four tests and checks were removed.
+- Six wrong versions, each caught by a check that names the mistake, none
   hanging (every run under a second):
 
 | Wrong version                                   | Tests failed |
 | :---------------------------------------------- | -----------: |
 | Expected utility averages, ignoring the belief  | 11           |
 | `best_action` keeps the last of a tie (`>=`)    | 1            |
-| `best_action` picks the lowest                  | 10           |
-| `posterior` does not normalize                  | 10           |
-| `posterior` changes the belief in place         | 9            |
+| `best_action` picks the lowest                  | 9            |
 | VOI forgets to subtract acting now              | 6            |
 | VOI keeps the action chosen before looking      | 4            |
-| VOI does not weight by P(result)                | 5            |
+| VOI does not weight by P(result)                | 7            |
 
 ### Verbal check bank
 
@@ -281,9 +284,10 @@ walk through code. Every answer below was computed with the reference.
 - *P1.* The tests fail on a rename (P(buggy) 0.04). Is P(buggy) now above
   or below one half? *Below: 0.333. A flaky failure is still more likely
   from a correct change, because correct changes are 24 times as common.*
-- *P2.* If your `posterior` changed the belief it was given, which part of
-  the agent would go wrong? *`value_of_information`: the second result
-  would start from the first result's posterior.*
+- *P2.* Why does `value_of_information` need the posterior at all? *The
+  best action after a result depends on the belief after that result; the
+  belief before it would pick the same action every time and make the value
+  0.*
 
 **Value of information**
 
