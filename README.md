@@ -270,20 +270,27 @@ above. The small feature's tests are worth 0 because a failure (P(buggy)
 ### Verbal check bank
 
 Hypotheticals, as in earlier challenges. No question asks the student to
-walk through code. Every answer below was computed with the reference.
+walk through code, do arithmetic, or remember a number from the tables or
+the run; the numbers in italics are for the checker. Every answer below was
+computed with the reference.
 
 **Expected utility**
 
-- *E1.* What is EU(merge) for a change that is certainly correct? *10, the
-  utility itself; the sum has one term.*
-- *E2.* As P(buggy) rises from 0 to 1, in what order are the actions best?
-  *Merge, review, discard, switching near 0.05 and 0.72.*
+- *E1.* For a change the agent is certain is correct, what does your
+  `expected_utility` return for merging, and why? *The utility of merging a
+  correct change itself (10): every other term is multiplied by 0.*
+- *E2.* As the agent grows more sure a change is buggy, in what order do
+  merge, review and discard become the best action, and why that order?
+  *Merge, review, discard (switching near 0.05 and 0.72): each action's
+  expected utility is a straight line in P(buggy), and the best one changes
+  where two lines cross.*
 
 **Posterior**
 
-- *P1.* The tests fail on a rename (P(buggy) 0.04). Is P(buggy) now above
-  or below one half? *Below: 0.333. A flaky failure is still more likely
-  from a correct change, because correct changes are 24 times as common.*
+- *P1.* The tests fail on a change that was very unlikely to be buggy. Is it
+  now probably buggy? Why or why not? *Not necessarily: correct changes are
+  so much more common that a flaky failure can still come more often from a
+  correct one (a rename, 0.04, rises only to 0.333).*
 - *P2.* Why does `value_of_information` need the posterior at all? *The
   best action after a result depends on the belief after that result; the
   belief before it would pick the same action every time and make the value
@@ -291,21 +298,26 @@ walk through code. Every answer below was computed with the reference.
 
 **Value of information**
 
-- *V1.* Why are the tests worth exactly 0 on a small feature? *Pass or fail,
-  the agent reviews; information that cannot change the action is worth
-  nothing.*
-- *V2.* If the tests cost 2 instead of 1, what does the agent do with a
-  refactor? *Reviews without testing: the tests are worth 1.62.*
+- *V1.* When can a tool's answer be worth nothing to the agent, even though
+  the answer is informative? *When every result leaves the same best action;
+  information that cannot change the action is worth nothing (the small
+  feature's tests, 0.000).*
+- *V2.* If the tests became more expensive to run, how would the agent's
+  choice change, and where is the cut-off? *Once the cost is above the
+  tests' value of information, it acts without testing (a refactor: worth
+  1.62, so at a cost of 2 it reviews directly).*
 - *V3.* Could the value of information ever be negative? *No; the agent
   can always ignore the answer and do what it would have done.*
 
 **Reading the agent**
 
-- *A1.* What does the lint check add on a rename, and why does the agent
-  still pick the tests? *0.732 minus 0.2 is 0.532; the tests give 1.608
-  minus 1, which is 0.608.*
+- *A1.* When the agent could call either the tests or the lint check, how
+  does it choose between them? *It compares each tool's value of
+  information minus its cost, takes the larger, and acts directly if
+  neither is positive (a rename: tests 1.608 − 1 = 0.608 against lint
+  0.732 − 0.2 = 0.532).*
 - *A2.* What did your changed utility in question 2 do, and to whom?
-  *Open; listen for a specific number and a specific person.*
+  *Open; listen for what changed in the table and a specific person.*
 
 ### Grading notes
 
